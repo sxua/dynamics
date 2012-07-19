@@ -8,6 +8,6 @@ Gem::Specification.new do |s|
   s.description = "A framework for developing RubyMotion applications quickly."
   s.authors     = ["Ng Say Joe"]
   s.email       = 'ngsayjoe@gmail.com'
-  s.files       = ["lib/dynamics.rb"]
+  s.files       = ["lib/*.rb", "lib/base/*.rb"]
   s.homepage    = 'http://www.dynamics.io/'
 end
