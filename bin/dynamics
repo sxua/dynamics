@@ -14,7 +14,7 @@ def display_usage
   str += "  dynamics <command> [<args...>]\n"
   str += "\n"
   str += "Commands:\n"
-  str += "  create   Create a new project"
+  str += "  create   Create a new project scaffold"
   puts str
 end
 
@@ -29,7 +29,7 @@ for arg in ARGV
 end
 case command
    when '-h', '--help' then display_usage
-   when 'create' then puts "#{command} #{args}"
+   when 'create' then Dynamics.create_scaffold(args)
    else  display_usage
 end  
 
