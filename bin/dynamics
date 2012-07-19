@@ -1,5 +1,36 @@
 #!/usr/bin/env ruby
 
-require('dynamics')
+if File.exists?('../lib/dynamics.rb')
+  require('../lib/dynamics')
+else
+  require('dynamics')
+end
 
-puts Dynamics.hi
+def display_usage
+  str = "Dynamics is a framework for RubyMotion.\n"
+  str += "\n"
+  str += "Usage:\n"
+  str += "  dynamics [-h, --help]\n"
+  str += "  dynamics <command> [<args...>]\n"
+  str += "\n"
+  str += "Commands:\n"
+  str += "  create   Create a new project"
+  puts str
+end
+
+i = 1
+for arg in ARGV
+  case i
+     when 1 then command = arg
+     when 2 then args = arg
+     else command = '-h'
+  end    
+  i += 1
+end
+case command
+   when '-h', '--help' then display_usage
+   when 'create' then puts "#{command} #{args}"
+   else  display_usage
+end  
+
+
