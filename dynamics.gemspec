@@ -3,7 +3,7 @@ require('rake')
 
 Gem::Specification.new do |s|
   s.name        = 'dynamics'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.executables << 'dynamics'
   s.date        = '2012-07-07'
   s.summary     = "A framework for RubyMotion."
