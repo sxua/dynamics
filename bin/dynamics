@@ -14,12 +14,8 @@ def create_scaffold(name)
     Dir.mkdir(models_dir)    
     Dir.mkdir(views_dir)    
     
-    if File.exists?('../lib/base')
-      base_controllers_dir = "../lib/base/controllers"
-    else
-      base_controllers_dir = "base/controllers"      
-    end
-        
+    base_controllers_dir = File.join(File.dirname(__FILE__), '..', 'base', 'controllers')
+              
     f = File.new(File.join(controllers_dir, 'application_controller.rb'), 'w+')   
     f.write(render_code(File.join(base_controllers_dir, 'application_controller.rb'))) 
     f.close  
