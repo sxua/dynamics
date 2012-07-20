@@ -6,19 +6,33 @@ def create_scaffold(name)
   else  
     Dir.mkdir(name)
     
-    controllers_dir = File.join(name, 'controllers')  
-    models_dir = File.join(name, 'models')  
-    views_dir = File.join(name, 'views')  
-                
+    app_dir = File.join(name, 'app')    
+    build_dir = File.join(name, 'build')      
+    res_dir = File.join(name, 'resources')   
+        
+    Dir.mkdir(app_dir) 
+    Dir.mkdir(build_dir)       
+    Dir.mkdir(res_dir)   
+              
+    controllers_dir = File.join(app_dir, 'controllers')  
+    models_dir = File.join(app_dir, 'models')  
+    views_dir = File.join(app_dir, 'views')  
+                    
     Dir.mkdir(controllers_dir)    
     Dir.mkdir(models_dir)    
     Dir.mkdir(views_dir)    
     
-    base_controllers_dir = File.join(File.dirname(__FILE__), '..', 'base', 'controllers')
-              
+    base_dir = File.join(File.dirname(__FILE__), '..', 'base')
+    
     f = File.new(File.join(controllers_dir, 'application_controller.rb'), 'w+')   
-    f.write(render_code(File.join(base_controllers_dir, 'application_controller.rb'))) 
-    f.close  
+    f.write(render_code(File.join(base_dir, 'controllers', 'application_controller.rb'))) 
+    f.close    
+    
+    f = File.new(File.join(name, 'Rakefile'), 'w+')   
+    code = render_code(File.join(base_dir, 'Rakefile'))
+    code.gsub!("app.name = ''", "app.name = '#{name}'")
+    f.write(code) 
+    f.close    
   end
 end
 
