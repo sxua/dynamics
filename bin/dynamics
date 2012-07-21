@@ -25,18 +25,22 @@ def create_scaffold(name)
     base_dir = File.join(File.dirname(__FILE__), '..', 'base')
     
     f = File.new(File.join(controllers_dir, 'main_controller.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'controllers', 'main_controller.rb'))) 
+    f.write(render_code(File.join(base_dir, 'app', 'controllers', 'main_controller.rb'))) 
     f.close    
     
     f = File.new(File.join(views_dir, 'main_view.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'views', 'main_view.rb'))) 
+    f.write(render_code(File.join(base_dir, 'app', 'views', 'main_view.rb'))) 
     f.close
         
     f = File.new(File.join(name, 'Rakefile'), 'w+')   
     code = render_code(File.join(base_dir, 'Rakefile'))
     code.gsub!("app.name = ''", "app.name = '#{name}'")
     f.write(code) 
-    f.close    
+    f.close  
+    
+    f = File.new(File.join(app_dir, 'application.rb'), 'w+')   
+    f.write(render_code(File.join(base_dir, 'app', 'application.rb'))) 
+    f.close      
   end
 end
 

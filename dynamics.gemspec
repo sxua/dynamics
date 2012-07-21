@@ -11,6 +11,6 @@ Gem::Specification.new do |s|
   s.description = "A framework for developing RubyMotion applications quickly."
   s.authors     = ["Ng Say Joe"]
   s.email       = 'ngsayjoe@gmail.com'
-  s.files       = FileList["lib/*.rb", "base/Rakefile", "base/**/*.rb"].to_a
+  s.files       = FileList["lib/*.rb", "base/Rakefile", "base/application.rb", "base/**/*.rb"].to_a
   s.homepage    = 'http://www.dynamics.io/'
 end

@@ -1,19 +1,22 @@
 
 module Dynamics
   
-  class Controller
-    
+  class Application
     def application(application, didFinishLaunchingWithOptions:launchOptions)
       @window =  MainView.alloc.initWithFrame(UIScreen.mainScreen.bounds)  
-      @window.backgroundColor = UIColor.blueColor    
-      @window.makeKeyAndVisible      
+      @window.makeKeyAndVisible   
+      @window.rootViewController = MainController.alloc.initWithNibName(nil, bundle: nil)         
       true
-    end
-      
+    end    
   end
   
-  class View < UIView
-  end  
+  class Controller < UIViewController  
+    def viewDidLoad
+        super
+
+        self.view.backgroundColor = UIColor.blueColor   
+    end    
+  end
   
   class Window < UIWindow
   end  

@@ -8,6 +8,6 @@ require 'bubble-wrap'
 
 Motion::Project::App.setup do |app|
   app.name = ''  
-  app.delegate_class = 'MainController'  
+  app.delegate_class = 'Application'  
   app.files.unshift(File.join(Gem.bin_path('dynamics', 'dynamics').gsub(File.join('bin', 'dynamics'), ''), 'lib', 'dynamics.rb')) 
 end
