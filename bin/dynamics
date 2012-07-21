@@ -35,11 +35,14 @@ def create_scaffold(name)
     f = File.new(File.join(name, 'Rakefile'), 'w+')   
     code = render_code(File.join(base_dir, 'Rakefile'))
     code.gsub!("app.name = ''", "app.name = '#{name}'")
+    code.gsub!("app.delegate_class = ''", "app.delegate_class = '#{name}'")    
     f.write(code) 
     f.close  
     
     f = File.new(File.join(app_dir, 'application.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'app', 'application.rb'))) 
+    code = render_code(File.join(base_dir, 'app', 'application.rb')) 
+    code.gsub!("class Application", "class #{name}")    
+    f.write(code) 
     f.close      
   end
 end
