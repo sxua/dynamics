@@ -86,7 +86,7 @@ module Dynamics
       block.scan(/# \@\@.+\@\@/) do |placeholder|
         layout = placeholder.split(' ')[1].gsub('@', '')
         case layout
-           when 'Navigation' then new_code = new_code.gsub(block, code_navigation)
+           when 'Navigation' then new_code = new_code.gsub(block, navigation_code)
         end      
       end
     end
@@ -99,7 +99,7 @@ module Dynamics
   
 private
 
-  def self.code_navigation
+  def self.navigation_code
     code = "# @@Navigation@@\n"
     code += "controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
     code += "controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('Next', style: UIBarButtonItemStyleBordered, target:controller, action:'on_next')\n"      
