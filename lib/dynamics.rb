@@ -10,16 +10,10 @@ module Dynamics
       @window =  MainView.alloc.initWithFrame(UIScreen.mainScreen.bounds)  
       @window.makeKeyAndVisible   
       if @layout == 'Navigation'
-        controller = MainController.alloc.initWithNibName(nil, bundle: nil)   
-        controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle("Next", style: UIBarButtonItemStyleBordered, target:controller, action:'on_next')      
-        sub1_controller = Sub1Controller.alloc.initWithNibName(nil, bundle: nil)
-        sub1_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle("Next", style: UIBarButtonItemStyleBordered, target:sub1_controller, action:'on_next')              
-        controller.next_controller = sub1_controller
-        sub2_controller = Sub2Controller.alloc.initWithNibName(nil, bundle: nil)
-        sub1_controller.next_controller = sub2_controller
+        # @layouts/navigation@
                         
         @window.rootViewController = UINavigationController.alloc.initWithRootViewController(controller)           
-      elsif @layout == 'Tab Bar'
+      elsif @layout == 'Tab Bar'           
         controller = MainController.alloc.initWithNibName(nil, bundle: nil)    
         nav_controller = UINavigationController.alloc.initWithRootViewController(controller)
 

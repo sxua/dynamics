@@ -6,24 +6,40 @@ def create_scaffold(name)
   else  
     Dir.mkdir(name)
     
+    # Base
+        
     app_dir = File.join(name, 'app')    
     build_dir = File.join(name, 'build')      
-    res_dir = File.join(name, 'resources')   
-        
+    resources_dir = File.join(name, 'resources')   
+    templates_dir = File.join(name, 'templates')       
+    tmp_dir = File.join(name, 'tmp')   
+            
     Dir.mkdir(app_dir) 
     Dir.mkdir(build_dir)       
-    Dir.mkdir(res_dir)   
-              
-    controllers_dir = File.join(app_dir, 'controllers')  
-    models_dir = File.join(app_dir, 'models')  
-    views_dir = File.join(app_dir, 'views')  
-                    
-    Dir.mkdir(controllers_dir)    
-    Dir.mkdir(models_dir)    
-    Dir.mkdir(views_dir)    
+    Dir.mkdir(resources_dir)   
+    Dir.mkdir(templates_dir)       
+    Dir.mkdir(tmp_dir)    
     
     base_dir = File.join(File.dirname(__FILE__), '..', 'base')
     
+    f = File.new(File.join(name, 'Rakefile'), 'w+')   
+    code = render_code(File.join(base_dir, 'Rakefile'))
+    code.gsub!("app.name = ''", "app.name = '#{name}'")
+    code.gsub!("app.delegate_class = ''", "app.delegate_class = '#{name}'")    
+    f.write(code) 
+    f.close  
+    
+    f = File.new(File.join(app_dir, 'application.rb'), 'w+')   
+    code = render_code(File.join(base_dir, 'app', 'application.rb')) 
+    code.gsub!("class Application", "class #{name}")    
+    f.write(code) 
+    f.close
+        
+    # Controllers 
+    
+    controllers_dir = File.join(app_dir, 'controllers')    
+    Dir.mkdir(controllers_dir)    
+        
     f = File.new(File.join(controllers_dir, 'main_controller.rb'), 'w+')   
     f.write(render_code(File.join(base_dir, 'app', 'controllers', 'main_controller.rb'))) 
     f.close    
@@ -35,7 +51,12 @@ def create_scaffold(name)
     f = File.new(File.join(controllers_dir, 'sub2_controller.rb'), 'w+')   
     f.write(render_code(File.join(base_dir, 'app', 'controllers', 'sub2_controller.rb'))) 
     f.close
-            
+           
+    # Views
+                
+    views_dir = File.join(app_dir, 'views')  
+    Dir.mkdir(views_dir)
+                        
     f = File.new(File.join(views_dir, 'main_view.rb'), 'w+')   
     f.write(render_code(File.join(base_dir, 'app', 'views', 'main_view.rb'))) 
     f.close
@@ -48,18 +69,14 @@ def create_scaffold(name)
     f.write(render_code(File.join(base_dir, 'app', 'views', 'sub2_view.rb'))) 
     f.close
                 
-    f = File.new(File.join(name, 'Rakefile'), 'w+')   
-    code = render_code(File.join(base_dir, 'Rakefile'))
-    code.gsub!("app.name = ''", "app.name = '#{name}'")
-    code.gsub!("app.delegate_class = ''", "app.delegate_class = '#{name}'")    
-    f.write(code) 
-    f.close  
-    
-    f = File.new(File.join(app_dir, 'application.rb'), 'w+')   
-    code = render_code(File.join(base_dir, 'app', 'application.rb')) 
-    code.gsub!("class Application", "class #{name}")    
-    f.write(code) 
-    f.close      
+    # Layouts 
+
+    layouts_dir = File.join(templates_dir, 'layouts')  
+    Dir.mkdir(layouts_dir)
+        
+    f = File.new(File.join(templates_dir, 'layouts', '_navigation.rb'), 'w+')   
+    f.write(render_code(File.join(base_dir, 'templates', 'layouts', '_navigation.rb'))) 
+    f.close    
   end
 end
 
