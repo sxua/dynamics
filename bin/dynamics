@@ -1,84 +1,7 @@
 #!/usr/bin/env ruby
 
-def create_scaffold(name)
-  if File.exists?(name)    
-    puts "Error, #{name} already exists!"
-  else  
-    Dir.mkdir(name)
-    
-    # Base
-        
-    app_dir = File.join(name, 'app')    
-    build_dir = File.join(name, 'build')      
-    resources_dir = File.join(name, 'resources')   
-    templates_dir = File.join(name, 'templates')       
-    tmp_dir = File.join(name, 'tmp')   
-            
-    Dir.mkdir(app_dir) 
-    Dir.mkdir(build_dir)       
-    Dir.mkdir(resources_dir)   
-    Dir.mkdir(templates_dir)       
-    Dir.mkdir(tmp_dir)    
-    
-    base_dir = File.join(File.dirname(__FILE__), '..', 'base')
-    
-    f = File.new(File.join(name, 'Rakefile'), 'w+')   
-    code = render_code(File.join(base_dir, 'Rakefile'))
-    code.gsub!("app.name = ''", "app.name = '#{name}'")
-    code.gsub!("app.delegate_class = ''", "app.delegate_class = '#{name}'")    
-    f.write(code) 
-    f.close  
-    
-    f = File.new(File.join(app_dir, 'application.rb'), 'w+')   
-    code = render_code(File.join(base_dir, 'app', 'application.rb')) 
-    code.gsub!("class Application", "class #{name}")    
-    f.write(code) 
-    f.close
-        
-    # Controllers 
-    
-    controllers_dir = File.join(app_dir, 'controllers')    
-    Dir.mkdir(controllers_dir)    
-        
-    f = File.new(File.join(controllers_dir, 'main_controller.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'app', 'controllers', 'main_controller.rb'))) 
-    f.close    
-    
-    f = File.new(File.join(controllers_dir, 'sub1_controller.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'app', 'controllers', 'sub1_controller.rb'))) 
-    f.close
-    
-    f = File.new(File.join(controllers_dir, 'sub2_controller.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'app', 'controllers', 'sub2_controller.rb'))) 
-    f.close
-           
-    # Views
-                
-    views_dir = File.join(app_dir, 'views')  
-    Dir.mkdir(views_dir)
-                        
-    f = File.new(File.join(views_dir, 'main_view.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'app', 'views', 'main_view.rb'))) 
-    f.close
-        
-    f = File.new(File.join(views_dir, 'sub1_view.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'app', 'views', 'sub1_view.rb'))) 
-    f.close
-    
-    f = File.new(File.join(views_dir, 'sub2_view.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'app', 'views', 'sub2_view.rb'))) 
-    f.close
-                
-    # Layouts 
-
-    layouts_dir = File.join(templates_dir, 'layouts')  
-    Dir.mkdir(layouts_dir)
-        
-    f = File.new(File.join(templates_dir, 'layouts', '_navigation.rb'), 'w+')   
-    f.write(render_code(File.join(base_dir, 'templates', 'layouts', '_navigation.rb'))) 
-    f.close    
-  end
-end
+require 'rubygems'
+require 'dynamics'
 
 def display_usage
   str = "Dynamics is a framework for RubyMotion.\n"
@@ -92,13 +15,6 @@ def display_usage
   puts str
 end
 
-def render_code(name)
-    f = File.open(name)     
-    content = f.read
-    f.close
-    content
-end
-
 i = 1
 for arg in ARGV
   case i
@@ -110,7 +26,7 @@ for arg in ARGV
 end
 case command
    when '-h', '--help' then display_usage
-   when 'create' then create_scaffold(args)
+   when 'create' then Dynamics::create_scaffold(args, File.dirname(__FILE__))
    else  display_usage
 end  
 

@@ -5,37 +5,12 @@ $LOAD_PATH.unshift('/Library/RubyMotion/lib')
 require 'motion/project'
 require 'rubygems'
 require 'bubble-wrap'
-
-def render_code(name)
-    f = File.open(name)     
-    content = f.read
-    f.close
-    content
-end
+require 'dynamics'
 
 Motion::Project::App.setup do |app|
   app.name = ''  
   app.delegate_class = ''  
   
-  # Copy gem library to tmp location
-  tmp_dir = File.join(File.dirname(__FILE__), 'tmp')
-  f = File.new(File.join(tmp_dir, 'dynamics.rb'), 'w+')   
-  f.write(render_code(File.join(Gem.bin_path('dynamics', 'dynamics').gsub(File.join('bin', 'dynamics'), ''), 'lib', 'dynamics.rb'))) 
-  f.close
-    
-  # Parse layouts
-  layouts_dir = File.join(File.dirname(__FILE__), 'templates', 'layouts')  
-  lib_code = render_code(File.join(tmp_dir, 'dynamics.rb'))
-  new_code = lib_code
-  lib_code.scan(/# \@layouts\/[a-z_]+\@/) do |layout|
-    layout_file = '_' + layout.split('/')[1].chomp('@') + '.rb'
-    layout_code = render_code(File.join(layouts_dir, layout_file))
-    new_code = new_code.gsub(layout, layout_code)
-  end
-  f = File.open(File.join(tmp_dir, 'dynamics.rb'), 'w+')   
-  f.write(new_code) 
-  f.close
-  
-  app.files.unshift(File.join(tmp_dir, 'dynamics.rb')) 
+  Dynamics::setup_framework(app, File.dirname(__FILE__))
 end
 
