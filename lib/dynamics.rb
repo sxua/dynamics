@@ -82,11 +82,11 @@ module Dynamics
     lib_dir = File.join(path, 'lib')
     lib_code = render_code(File.join(lib_dir, 'dynamics.rb'))
     new_code = lib_code
-    lib_code.scan(/# \@\@.+\@\@.+# \@\@End\@\@/m) do |block|    
+    lib_code.scan(/\s+# \@\@.+\@\@.+# \@\@End\@\@/m) do |block|    
       block.scan(/# \@\@.+\@\@/) do |placeholder|
         layout = placeholder.split(' ')[1].gsub('@', '')
         case layout
-           when 'Navigation' then new_code = new_code.gsub(block, navigation_code)
+           when 'Navigation' then new_code = new_code.gsub(block, navigation_code(path))
         end      
       end
     end
@@ -99,16 +99,42 @@ module Dynamics
   
 private
 
-  def self.navigation_code
-    code = "# @@Navigation@@\n"
-    code += "controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
-    code += "controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('Next', style: UIBarButtonItemStyleBordered, target:controller, action:'on_next')\n"      
-    code += "sub1_controller = Sub1Controller.alloc.initWithNibName(nil, bundle: nil)\n"
-    code += "sub1_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('Next', style: UIBarButtonItemStyleBordered, target:sub1_controller, action:'on_next')\n"              
-    code += "controller.next_controller = sub1_controller\n"
-    code += "sub2_controller = Sub2Controller.alloc.initWithNibName(nil, bundle: nil)\n"
-    code += "sub1_controller.next_controller = sub2_controller\n"   
-    code += "# @@End@@"
+  def self.camelize(str)
+    ret = ''
+    words = str.split('_')
+    for word in words
+      ret += word.capitalize
+    end
+    ret
+  end
+  
+  def self.navigation_code(path)
+    code = "\n        # @@Navigation@@\n"
+    
+    # Controllers
+    class_names = []
+    controllers = Dir.glob(File.join(path, 'app', 'controllers', '*.rb'))
+    for controller in controllers
+      filename = File.basename(controller)
+      if filename != 'main_controller.rb'
+        class_names << camelize(filename.split('.')[0])
+      end
+    end
+    code += "        controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
+    code += "        controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('Next', style: UIBarButtonItemStyleBordered, target:controller, action:'on_next')\n"          
+
+    i = 1
+    prev_controller = 'controller'
+    for class_name in class_names         
+      code += "        sub#{i}_controller = #{class_name}.alloc.initWithNibName(nil, bundle: nil)\n"    
+      code += "        #{prev_controller}.next_controller = sub#{i}_controller\n"        
+      if class_name != class_names.last
+        code += "        sub#{i}_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('Next', style: UIBarButtonItemStyleBordered, target:sub#{i}_controller, action:'on_next')\n"              
+        prev_controller = "sub#{i}_controller"     
+        i += 1        
+      end
+    end
+    code += "        # @@End@@"
   end
   
   def self.render_code(name)
