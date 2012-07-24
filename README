@@ -1,0 +1,30 @@
+== Dynamics
+
+A framework for developing RubyMotion applications quickly.
+
+== Getting Started
+
+1. Install Dynamics at the command prompt if you haven't yet:
+
+    gem install dynamics
+
+2. At the command prompt, create a new Dynamics application:
+
+    dynamics create Myapp
+
+3. Change directory to "Myapp" and run rake:
+
+    cd Myapp; rake
+
+4. Bingo! You'll see your application starting in iOS simulator:
+
+== Contributing
+
+We encourage you to contribute to Dynamics! 
+
+== License
+
+Dynamics is released under the MIT license:
+
+* http://www.opensource.org/licenses/MIT
+
