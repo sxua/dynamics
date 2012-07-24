@@ -1,7 +1,7 @@
 
 class Sub1Controller < Dynamics::Controller
   
-  def loaded
+  def load
   end
     
 end

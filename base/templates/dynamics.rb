@@ -32,10 +32,10 @@ module Dynamics
   class Controller < UIViewController   
     attr_accessor :next_controller
     
-    def loaded
+    def load
     end
     
-    def pushed 
+    def push
       self.navigationController.pushViewController(@next_controller, animated: true)      
     end
        
@@ -52,7 +52,7 @@ module Dynamics
       end     
       self.view.backgroundColor = UIColor.whiteColor  
       
-      loaded
+      load
     end    
   end
   

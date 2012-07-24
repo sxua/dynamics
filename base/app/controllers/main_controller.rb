@@ -1,7 +1,7 @@
 
 class MainController < Dynamics::Controller
   
-  def loaded
+  def load
   end
     
 end
