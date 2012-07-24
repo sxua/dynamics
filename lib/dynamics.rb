@@ -82,7 +82,7 @@ module Dynamics
     lib_dir = File.join(path, 'lib')
     lib_code = render_code(File.join(lib_dir, 'dynamics.rb'))
     new_code = lib_code
-    lib_code.scan(/\s+# \@\@.+\@\@.+# \@\@End\@\@/m) do |block|    
+    lib_code.scan(/# \@\@.+\@\@.+# \@\@End\@\@/m) do |block|    
       block.scan(/# \@\@.+\@\@/) do |placeholder|
         layout = placeholder.split(' ')[1].gsub('@', '')
         case layout
@@ -109,27 +109,27 @@ private
   end
   
   def self.navigation_code(path)
-    code = "\n        # @@Navigation@@\n"
+    code = "# @@Navigation@@\n"
     
     # Controllers
-    class_names = []
-    controllers = Dir.glob(File.join(path, 'app', 'controllers', '*.rb'))
-    for controller in controllers
+    controllers = []
+    for controller in Dir.glob(File.join(path, 'app', 'controllers', '*.rb'))
       filename = File.basename(controller)
       if filename != 'main_controller.rb'
-        class_names << camelize(filename.split('.')[0])
+        controllers << {:filename => filename, :class_name => camelize(filename.split('.')[0]), :name => filename.split('_')[0].capitalize}
       end
     end
     code += "        controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
-    code += "        controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('Next', style: UIBarButtonItemStyleBordered, target:controller, action:'on_next')\n"          
-
+    if controllers.size > 0    
+      code += "        controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:controller, action:'pushed')\n"          
+    end
     i = 1
     prev_controller = 'controller'
-    for class_name in class_names         
-      code += "        sub#{i}_controller = #{class_name}.alloc.initWithNibName(nil, bundle: nil)\n"    
+    for controller in controllers         
+      code += "        sub#{i}_controller = #{controller[:class_name]}.alloc.initWithNibName(nil, bundle: nil)\n"    
       code += "        #{prev_controller}.next_controller = sub#{i}_controller\n"        
-      if class_name != class_names.last
-        code += "        sub#{i}_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('Next', style: UIBarButtonItemStyleBordered, target:sub#{i}_controller, action:'on_next')\n"              
+      if controller != controllers.last
+        code += "        sub#{i}_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers[i][:name]}', style: UIBarButtonItemStyleBordered, target:sub#{i}_controller, action:'pushed')\n"              
         prev_controller = "sub#{i}_controller"     
         i += 1        
       end

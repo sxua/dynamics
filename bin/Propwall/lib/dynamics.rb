@@ -11,6 +11,13 @@ module Dynamics
       @window.makeKeyAndVisible   
       if @layout == 'Navigation'
         # @@Navigation@@
+        controller = MainController.alloc.initWithNibName(nil, bundle: nil)
+        controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('Sub2', style: UIBarButtonItemStyleBordered, target:controller, action:'pushed')
+        sub1_controller = Sub2Controller.alloc.initWithNibName(nil, bundle: nil)
+        controller.next_controller = sub1_controller
+        sub1_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('Test1', style: UIBarButtonItemStyleBordered, target:sub1_controller, action:'pushed')
+        sub2_controller = Test1Controller.alloc.initWithNibName(nil, bundle: nil)
+        sub1_controller.next_controller = sub2_controller
         # @@End@@
                                 
         @window.rootViewController = UINavigationController.alloc.initWithRootViewController(controller)           
@@ -49,7 +56,7 @@ module Dynamics
         self.title = App.name        
       else
         self.title = name
-      end     
+      end           
       self.view.backgroundColor = UIColor.whiteColor  
       
       loaded
