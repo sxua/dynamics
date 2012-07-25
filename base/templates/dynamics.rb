@@ -18,8 +18,13 @@ module Dynamics
         controller = MainController.alloc.initWithNibName(nil, bundle: nil)    
         nav_controller = UINavigationController.alloc.initWithRootViewController(controller)
 
-        tab_controller = UITabBarController.alloc.initWithNibName(nil, bundle: nil)
-        tab_controller.viewControllers = [nav_controller]
+        other_controller = UIViewController.alloc.initWithNibName(nil, bundle: nil)
+        other_controller.title = "Other"
+        other_controller.view = Sub1View.alloc.initWithFrame(UIScreen.mainScreen.bounds)  
+        other_controller.view.backgroundColor = UIColor.purpleColor
+        
+        tab_controller = UITabBarController.alloc.initWithNibName(nil, bundle: nil)    
+        tab_controller.viewControllers = [nav_controller, other_controller]
         
         @window.rootViewController = tab_controller                       
       else     
@@ -30,7 +35,7 @@ module Dynamics
   end
   
   class Controller < UIViewController   
-    attr_accessor :next_controller
+    attr_accessor :next_controller, :next_view
     
     def load
     end
@@ -40,7 +45,15 @@ module Dynamics
     end
        
   private
-   
+    
+    def loadView
+      if @next_view.nil?
+        super
+      else
+        self.view = @next_view      
+      end
+    end
+    
     def viewDidLoad
       super
       
@@ -56,6 +69,9 @@ module Dynamics
     end    
   end
   
+  class View < UIView
+  end
+    
   class Window < UIWindow
-  end  
+  end
 end

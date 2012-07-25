@@ -1,4 +1,4 @@
 
-class Sub1View < Dynamics::Window
+class Sub1View < Dynamics::View
 
 end
