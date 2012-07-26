@@ -109,16 +109,21 @@ private
     ret
   end
   
-  def self.navigation_code(path)
-    code = "# @@Navigation@@\n"
+  def self.find_controllers(path)
     controllers = []
     for controller in Dir.glob(File.join(path, 'app', 'controllers', '*.rb'))
       filename = File.basename(controller)
       if filename != 'main_controller.rb'
         controllers << {:filename => filename, :class_name => camelize(filename.split('.')[0]), :name => filename.split('_')[0].capitalize}
       end
-    end
+    end    
+    controllers
+  end
+  
+  def self.navigation_code(path)
+    code = "# @@Navigation@@\n"
     code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
+    controllers = find_controllers(path)    
     if controllers.size > 0    
       code += "        main_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:main_controller, action:'push')\n"          
     end
@@ -147,14 +152,19 @@ private
   
   def self.tab_bar_code(path)
     code = "# @@Tab Bar@@\n"
-    code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"   
-    code += "        main_controller.title = main_controller.name\n"         
-    code += "        sub1_controller = Sub1Controller.alloc.initWithNibName(nil, bundle: nil)\n"
-    code += "        sub1_controller.title = sub1_controller.name\n"
-    code += "        sub2_controller = Sub2Controller.alloc.initWithNibName(nil, bundle: nil)\n"
-    code += "        sub2_controller.title = sub2_controller.name\n"        
+    controllers_list = 'main_controller'    
+    code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
+    code += "        main_controller.title = main_controller.name\n"   
+    i = 1       
+    controllers = find_controllers(path)    
+    for controller in controllers         
+      controllers_list += ", sub#{i}_controller"         
+      code += "        sub#{i}_controller = #{controller[:class_name]}.alloc.initWithNibName(nil, bundle: nil)\n"
+      code += "        sub#{i}_controller.title = sub#{i}_controller.name\n"   
+      i += 1        
+    end        
     code += "        tab_controller = UITabBarController.alloc.initWithNibName(nil, bundle: nil)\n"    
-    code += "        tab_controller.viewControllers = [main_controller, sub1_controller, sub2_controller]\n"
+    code += "        tab_controller.viewControllers = [#{controllers_list}]\n"
     code += "        @window.rootViewController = tab_controller\n"      
     code += "        # @@End@@"  
   end  
