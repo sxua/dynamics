@@ -82,11 +82,12 @@ module Dynamics
     lib_dir = File.join(path, 'lib')
     lib_code = render_code(File.join(lib_dir, 'dynamics.rb'))
     new_code = lib_code
-    lib_code.scan(/# \@\@.+\@\@.+# \@\@End\@\@/m) do |block|    
-      block.scan(/# \@\@.+\@\@/) do |placeholder|
-        layout = placeholder.split(' ')[1].gsub('@', '')
+    lib_code.scan(/# @@.+?@@.+?# @@End@@/m) do |block|
+      block.scan(/^# @@.+?@@/) do |placeholder|
+        layout = placeholder.gsub('# @@', '').gsub('@', '')
         case layout
            when 'Navigation' then new_code = new_code.gsub(block, navigation_code(path))
+           when 'Tab Bar' then new_code = new_code.gsub(block, tab_bar_code(path))             
         end      
       end
     end
@@ -110,8 +111,6 @@ private
   
   def self.navigation_code(path)
     code = "# @@Navigation@@\n"
-    
-    # Controllers
     controllers = []
     for controller in Dir.glob(File.join(path, 'app', 'controllers', '*.rb'))
       filename = File.basename(controller)
@@ -119,12 +118,12 @@ private
         controllers << {:filename => filename, :class_name => camelize(filename.split('.')[0]), :name => filename.split('_')[0].capitalize}
       end
     end
-    code += "        controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
+    code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
     if controllers.size > 0    
-      code += "        controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:controller, action:'push')\n"          
+      code += "        main_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:main_controller, action:'push')\n"          
     end
     i = 1
-    prev_controller = 'controller'
+    prev_controller = 'main_controller'
     for controller in controllers         
       code += "        sub#{i}_controller = #{controller[:class_name]}.alloc.initWithNibName(nil, bundle: nil)\n"     
       code += "        sub#{i}_controller.next_view = #{controller[:name]}View.alloc.initWithFrame(UIScreen.mainScreen.bounds)\n"                        
@@ -135,7 +134,8 @@ private
         i += 1        
       end
     end
-    code += "        # @@End@@"
+    code += "        @window.rootViewController = UINavigationController.alloc.initWithRootViewController(main_controller)\n"       
+    code += "        # @@End@@" 
   end
   
   def self.render_code(name)
@@ -144,4 +144,18 @@ private
       f.close
       content
   end
+  
+  def self.tab_bar_code(path)
+    code = "# @@Tab Bar@@\n"
+    code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"   
+    code += "        main_controller.title = main_controller.name\n"         
+    code += "        sub1_controller = Sub1Controller.alloc.initWithNibName(nil, bundle: nil)\n"
+    code += "        sub1_controller.title = sub1_controller.name\n"
+    code += "        sub2_controller = Sub2Controller.alloc.initWithNibName(nil, bundle: nil)\n"
+    code += "        sub2_controller.title = sub2_controller.name\n"        
+    code += "        tab_controller = UITabBarController.alloc.initWithNibName(nil, bundle: nil)\n"    
+    code += "        tab_controller.viewControllers = [main_controller, sub1_controller, sub2_controller]\n"
+    code += "        @window.rootViewController = tab_controller\n"      
+    code += "        # @@End@@"  
+  end  
 end
