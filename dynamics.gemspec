@@ -4,9 +4,9 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name        = 'dynamics'
-  s.version     = '0.1.0'
+  s.version     = '0.1.1'
   s.executables = 'dynamics'
-  s.date        = '2012-07-22'
+  s.date        = '2012-08-01'
   s.summary     = "A framework for RubyMotion."
   s.description = "A framework for developing RubyMotion applications quickly."
   s.authors     = ["Ng Say Joe"]
