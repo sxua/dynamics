@@ -125,7 +125,7 @@ private
     code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
     controllers = find_controllers(path)    
     if controllers.size > 0    
-      code += "        main_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:main_controller, action:'push')\n"          
+      code += "        main_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:main_controller, action:'nextScreen')\n"          
     end
     i = 1
     prev_controller = 'main_controller'
@@ -134,7 +134,7 @@ private
       code += "        sub#{i}_controller.next_view = #{controller[:name]}View.alloc.initWithFrame(UIScreen.mainScreen.bounds)\n"                        
       code += "        #{prev_controller}.next_controller = sub#{i}_controller\n"        
       if controller != controllers.last
-        code += "        sub#{i}_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers[i][:name]}', style: UIBarButtonItemStyleBordered, target:sub#{i}_controller, action:'push')\n"              
+        code += "        sub#{i}_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers[i][:name]}', style: UIBarButtonItemStyleBordered, target:sub#{i}_controller, action:'nextScreen')\n"              
         prev_controller = "sub#{i}_controller"     
         i += 1        
       end

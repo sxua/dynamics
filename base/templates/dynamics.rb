@@ -2,10 +2,13 @@
 module Dynamics
     
   class Application
+    
+  private
+
     def initialize(layout)
       @layout = layout
     end
-    
+        
     def application(application, didFinishLaunchingWithOptions:launchOptions)
       @window =  MainView.alloc.initWithFrame(UIScreen.mainScreen.bounds)  
       @window.makeKeyAndVisible   
@@ -30,8 +33,16 @@ module Dynamics
     end
        
   private
+          
+    def loadView
+      if @next_view.nil?
+        super
+      else
+        self.view = @next_view      
+      end
+    end
     
-    def load
+    def viewDidLoad
       super
       if name == 'Main'
         self.title = App.name 
@@ -40,19 +51,9 @@ module Dynamics
         self.title = name
         self.view.backgroundColor = UIColor.grayColor             
       end     
-    end
-    alias_method :load, :viewDidLoad    
-          
-    def load_view
-      if @next_view.nil?
-        super
-      else
-        self.view = @next_view      
-      end
-    end
-    alias_method :create_view, :loadView   
+    end    
         
-    def push
+    def nextScreen
       self.navigationController.pushViewController(@next_controller, animated: true)      
     end
   end
