@@ -19,7 +19,7 @@ module Dynamics
       Dir.mkdir(resources_dir)      
       Dir.mkdir(lib_dir)    
 
-      base_dir = File.join(File.dirname(__FILE__), '..', 'base')
+      base_dir = File.join(path, '..', 'base')
 
       f = File.new(File.join(name, 'Rakefile'), 'w+')   
       code = render_code(File.join(base_dir, 'Rakefile'))
@@ -69,30 +69,25 @@ module Dynamics
       f = File.new(File.join(views_dir, 'sub2_view.rb'), 'w+')   
       f.write(render_code(File.join(base_dir, 'app', 'views', 'sub2_view.rb'))) 
       f.close
-
-      # Lib 
-
-      f = File.new(File.join(lib_dir, 'dynamics.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'templates', 'dynamics.rb')) ) 
-      f.close 
     end
   end
     
   def self.setup_framework(app, path)
-    lib_dir = File.join(path, 'lib')
-    lib_code = render_code(File.join(lib_dir, 'dynamics.rb'))
-    new_code = lib_code
-    lib_code.scan(/# @@.+?@@.+?# @@End@@/m) do |block|
+    lib_dir = File.join(path, 'lib')    
+    templates_dir = File.join(Gem.bin_path('dynamics', 'dynamics').gsub(File.join('bin', 'dynamics'), ''), 'base', 'templates')
+   
+    template_code = lib_code = render_code(File.join(templates_dir, 'dynamics.rb'))
+    template_code.scan(/# @@.+?@@.+?# @@End@@/m) do |block|
       block.scan(/^# @@.+?@@/) do |placeholder|
         layout = placeholder.gsub('# @@', '').gsub('@', '')
         case layout
-           when 'Navigation' then new_code = new_code.gsub(block, navigation_code(path))
-           when 'Tab Bar' then new_code = new_code.gsub(block, tab_bar_code(path))             
+           when 'Navigation' then lib_code = lib_code.gsub(block, navigation_code(path))
+           when 'Tab Bar' then lib_code = lib_code.gsub(block, tab_bar_code(path))             
         end      
       end
     end
     f = File.open(File.join(lib_dir, 'dynamics.rb'), 'w+')   
-    f.write(new_code) 
+    f.write(lib_code) 
     f.close
   
     app.files.unshift(File.join(lib_dir, 'dynamics.rb')) 
