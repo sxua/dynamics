@@ -41,8 +41,8 @@ module Dynamics
       controllers_dir = File.join(app_dir, 'controllers')    
       Dir.mkdir(controllers_dir)    
 
-      f = File.new(File.join(controllers_dir, 'main_controller.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'app', 'controllers', 'main_controller.rb'))) 
+      f = File.new(File.join(controllers_dir, 'home_controller.rb'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'app', 'controllers', 'home_controller.rb'))) 
       f.close    
 
       f = File.new(File.join(controllers_dir, 'sub1_controller.rb'), 'w+')   
@@ -58,8 +58,8 @@ module Dynamics
       views_dir = File.join(app_dir, 'views')  
       Dir.mkdir(views_dir)
 
-      f = File.new(File.join(views_dir, 'main_view.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'app', 'views', 'main_view.rb'))) 
+      f = File.new(File.join(views_dir, 'home_view.rb'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'app', 'views', 'home_view.rb'))) 
       f.close
 
       f = File.new(File.join(views_dir, 'sub1_view.rb'), 'w+')   
@@ -115,7 +115,7 @@ private
     controllers = []
     for controller in Dir.glob(File.join(path, 'app', 'controllers', '*.rb'))
       filename = File.basename(controller)
-      if filename != 'main_controller.rb'
+      if filename != 'home_controller.rb'
         controllers << {:filename => filename, :class_name => camelize(filename.split('.')[0]), :name => filename.split('_')[0].capitalize}
       end
     end    
@@ -124,13 +124,13 @@ private
   
   def self.navigation_code(path)
     code = "# @@Navigation@@\n"
-    code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
+    code += "        home_controller = HomeController.alloc.initWithNibName(nil, bundle: nil)\n"  
     controllers = find_controllers(path)    
     if controllers.size > 0    
-      code += "        main_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:main_controller, action:'nextScreen')\n"          
+      code += "        home_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:home_controller, action:'nextScreen')\n"          
     end
     i = 1
-    prev_controller = 'main_controller'
+    prev_controller = 'home_controller'
     for controller in controllers         
       code += "        sub#{i}_controller = #{controller[:class_name]}.alloc.initWithNibName(nil, bundle: nil)\n"     
       code += "        sub#{i}_controller.next_view = #{controller[:name]}View.alloc.initWithFrame(UIScreen.mainScreen.bounds)\n"                        
@@ -141,7 +141,7 @@ private
         i += 1        
       end
     end
-    code += "        @window.rootViewController = UINavigationController.alloc.initWithRootViewController(main_controller)\n"       
+    code += "        @window.rootViewController = UINavigationController.alloc.initWithRootViewController(home_controller)\n"       
     code += "        # @@End@@" 
   end
   
@@ -154,9 +154,9 @@ private
   
   def self.tab_bar_code(path)
     code = "# @@Tab Bar@@\n"
-    controllers_list = 'main_controller'    
-    code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
-    code += "        main_controller.title = main_controller.name\n"   
+    controllers_list = 'home_controller'    
+    code += "        home_controller = HomeController.alloc.initWithNibName(nil, bundle: nil)\n"  
+    code += "        home_controller.title = 'Home'\n"   
     i = 1       
     controllers = find_controllers(path)    
     for controller in controllers         
@@ -173,10 +173,10 @@ private
   
   def self.tab_nav_code(path)
     code = "# @@Tab Nav@@\n"
-    controllers_list = 'main_nav_controller'    
-    code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
-    code += "        main_controller.title = main_controller.name\n"   
-    code += "        main_nav_controller = UINavigationController.alloc.initWithRootViewController(main_controller)\n"    
+    controllers_list = 'home_nav_controller'    
+    code += "        home_controller = HomeController.alloc.initWithNibName(nil, bundle: nil)\n"  
+    code += "        home_controller.title = 'Home'\n"   
+    code += "        home_nav_controller = UINavigationController.alloc.initWithRootViewController(home_controller)\n"    
     i = 1       
     controllers = find_controllers(path)    
     for controller in controllers         

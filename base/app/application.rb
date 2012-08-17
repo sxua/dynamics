@@ -2,8 +2,10 @@
 class Application < Dynamics::Application
 
   def initialize
-    #super('Navigation')
-    #super('Tab Bar')    
-    super('Tab Nav')        
+    super  
+        
+    # self.layout = 'Navigation'
+    # self.layout = 'Tab Bar'       
+    self.layout = 'Tab Nav' 
   end
 end

@@ -2,15 +2,12 @@
 module Dynamics
     
   class Application
-    
+    attr_accessor :layout
+  
   private
-
-    def initialize(layout)
-      @layout = layout
-    end
         
     def application(application, didFinishLaunchingWithOptions:launchOptions)
-      @window =  MainView.alloc.initWithFrame(UIScreen.mainScreen.bounds)  
+      @window =  HomeView.alloc.initWithFrame(UIScreen.mainScreen.bounds)  
       @window.makeKeyAndVisible   
       if @layout == 'Navigation'
         # @@Navigation@@
@@ -22,7 +19,7 @@ module Dynamics
         # @@Tab Nav@@
         # @@End@@                    
       else     
-        @window.rootViewController = MainController.alloc.initWithNibName(nil, bundle: nil)           
+        @window.rootViewController = HomeController.alloc.initWithNibName(nil, bundle: nil)           
       end  
       true
     end    
@@ -47,13 +44,16 @@ module Dynamics
     
     def viewDidLoad
       super
-      if name == 'Main'
-        self.title = App.name 
-        self.view.backgroundColor = UIColor.whiteColor                 
+       
+      self.title = name            
+      if name == 'Home'
+        if !self.navigationItem.nil?
+          self.navigationItem.title = App.name          
+        end        
+        self.view.backgroundColor = UIColor.whiteColor                             
       else
-        self.title = name
         self.view.backgroundColor = UIColor.grayColor             
-      end     
+      end       
     end    
         
     def nextScreen
