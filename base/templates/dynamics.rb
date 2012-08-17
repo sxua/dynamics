@@ -44,12 +44,8 @@ module Dynamics
     
     def viewDidLoad
       super
-       
-      self.title = name            
+               
       if name == 'Home'
-        if !self.navigationItem.nil?
-          self.navigationItem.title = App.name          
-        end        
         self.view.backgroundColor = UIColor.whiteColor                             
       else
         self.view.backgroundColor = UIColor.grayColor             

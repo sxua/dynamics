@@ -75,6 +75,18 @@ module Dynamics
       f = File.new(File.join(resources_dir, 'icon.png'), 'w+')   
       f.write(render_code(File.join(base_dir, 'resources', 'icon.png'))) 
       f.close      
+      
+      f = File.new(File.join(resources_dir, 'home.png'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'resources', 'home.png'))) 
+      f.close
+      
+      f = File.new(File.join(resources_dir, 'sub1.png'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'resources', 'sub1.png'))) 
+      f.close
+      
+      f = File.new(File.join(resources_dir, 'sub2.png'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'resources', 'sub2.png'))) 
+      f.close                  
     end
   end
     
@@ -125,6 +137,7 @@ private
   def self.navigation_code(path)
     code = "# @@Navigation@@\n"
     code += "        home_controller = HomeController.alloc.initWithNibName(nil, bundle: nil)\n"  
+    code += "        home_controller.navigationItem.title = App.name\n"      
     controllers = find_controllers(path)    
     if controllers.size > 0    
       code += "        home_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:home_controller, action:'nextScreen')\n"          
@@ -156,13 +169,13 @@ private
     code = "# @@Tab Bar@@\n"
     controllers_list = 'home_controller'    
     code += "        home_controller = HomeController.alloc.initWithNibName(nil, bundle: nil)\n"  
-    code += "        home_controller.title = 'Home'\n"   
+    code += "        home_controller.tabBarItem = UITabBarItem.alloc.initWithTitle('Home', image: UIImage.imageNamed('home.png'), tag: 0)\n"    
     i = 1       
     controllers = find_controllers(path)    
     for controller in controllers         
       controllers_list += ", sub#{i}_controller"         
       code += "        sub#{i}_controller = #{controller[:class_name]}.alloc.initWithNibName(nil, bundle: nil)\n"
-      code += "        sub#{i}_controller.title = sub#{i}_controller.name\n"   
+      code += "        sub#{i}_controller.tabBarItem = UITabBarItem.alloc.initWithTitle(sub#{i}_controller.name, image: UIImage.imageNamed(sub#{i}_controller.name.downcase + '.png'), tag: #{i})\n"            
       i += 1        
     end        
     code += "        tab_controller = UITabBarController.alloc.initWithNibName(nil, bundle: nil)\n"    
@@ -175,14 +188,16 @@ private
     code = "# @@Tab Nav@@\n"
     controllers_list = 'home_nav_controller'    
     code += "        home_controller = HomeController.alloc.initWithNibName(nil, bundle: nil)\n"  
-    code += "        home_controller.title = 'Home'\n"   
+    code += "        home_controller.navigationItem.title = App.name\n"          
+    code += "        home_controller.tabBarItem = UITabBarItem.alloc.initWithTitle('Home', image: UIImage.imageNamed('home.png'), tag: 0)\n"        
     code += "        home_nav_controller = UINavigationController.alloc.initWithRootViewController(home_controller)\n"    
     i = 1       
     controllers = find_controllers(path)    
     for controller in controllers         
       controllers_list += ", sub#{i}_nav_controller"         
       code += "        sub#{i}_controller = #{controller[:class_name]}.alloc.initWithNibName(nil, bundle: nil)\n"
-      code += "        sub#{i}_controller.title = sub#{i}_controller.name\n"   
+      code += "        sub#{i}_controller.navigationItem.title = sub#{i}_controller.name\n"   
+      code += "        sub#{i}_controller.tabBarItem = UITabBarItem.alloc.initWithTitle(sub#{i}_controller.name, image: UIImage.imageNamed(sub#{i}_controller.name.downcase + '.png'), tag: #{i})\n"                  
       code += "        sub#{i}_nav_controller = UINavigationController.alloc.initWithRootViewController(sub#{i}_controller)\n"        
       i += 1        
     end        
