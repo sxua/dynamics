@@ -17,7 +17,10 @@ module Dynamics
         # @@End@@       
       elsif @layout == 'Tab Bar'           
         # @@Tab Bar@@
-        # @@End@@                 
+        # @@End@@     
+      elsif @layout == 'Tab Nav'           
+        # @@Tab Nav@@
+        # @@End@@                    
       else     
         @window.rootViewController = MainController.alloc.initWithNibName(nil, bundle: nil)           
       end  

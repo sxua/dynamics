@@ -69,6 +69,12 @@ module Dynamics
       f = File.new(File.join(views_dir, 'sub2_view.rb'), 'w+')   
       f.write(render_code(File.join(base_dir, 'app', 'views', 'sub2_view.rb'))) 
       f.close
+      
+      # Resources
+
+      f = File.new(File.join(resources_dir, 'icon.png'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'resources', 'icon.png'))) 
+      f.close      
     end
   end
     
@@ -82,7 +88,8 @@ module Dynamics
         layout = placeholder.gsub('# @@', '').gsub('@', '')
         case layout
            when 'Navigation' then lib_code = lib_code.gsub(block, navigation_code(path))
-           when 'Tab Bar' then lib_code = lib_code.gsub(block, tab_bar_code(path))             
+           when 'Tab Bar' then lib_code = lib_code.gsub(block, tab_bar_code(path))        
+           when 'Tab Nav' then lib_code = lib_code.gsub(block, tab_nav_code(path))                       
         end      
       end
     end
@@ -156,6 +163,27 @@ private
       controllers_list += ", sub#{i}_controller"         
       code += "        sub#{i}_controller = #{controller[:class_name]}.alloc.initWithNibName(nil, bundle: nil)\n"
       code += "        sub#{i}_controller.title = sub#{i}_controller.name\n"   
+      i += 1        
+    end        
+    code += "        tab_controller = UITabBarController.alloc.initWithNibName(nil, bundle: nil)\n"    
+    code += "        tab_controller.viewControllers = [#{controllers_list}]\n"
+    code += "        @window.rootViewController = tab_controller\n"      
+    code += "        # @@End@@"  
+  end  
+  
+  def self.tab_nav_code(path)
+    code = "# @@Tab Nav@@\n"
+    controllers_list = 'main_nav_controller'    
+    code += "        main_controller = MainController.alloc.initWithNibName(nil, bundle: nil)\n"  
+    code += "        main_controller.title = main_controller.name\n"   
+    code += "        main_nav_controller = UINavigationController.alloc.initWithRootViewController(main_controller)\n"    
+    i = 1       
+    controllers = find_controllers(path)    
+    for controller in controllers         
+      controllers_list += ", sub#{i}_nav_controller"         
+      code += "        sub#{i}_controller = #{controller[:class_name]}.alloc.initWithNibName(nil, bundle: nil)\n"
+      code += "        sub#{i}_controller.title = sub#{i}_controller.name\n"   
+      code += "        sub#{i}_nav_controller = UINavigationController.alloc.initWithRootViewController(sub#{i}_controller)\n"        
       i += 1        
     end        
     code += "        tab_controller = UITabBarController.alloc.initWithNibName(nil, bundle: nil)\n"    

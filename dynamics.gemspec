@@ -4,13 +4,13 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name        = 'dynamics'
-  s.version     = '0.1.1'
+  s.version     = '0.1.2'
   s.executables = 'dynamics'
-  s.date        = '2012-08-01'
+  s.date        = '2012-08-18'
   s.summary     = "A framework for RubyMotion."
   s.description = "A framework for developing RubyMotion applications quickly."
   s.authors     = ["Ng Say Joe"]
   s.email       = 'ngsayjoe@gmail.com'
-  s.files       = FileList["lib/*.rb", "base/Rakefile", "base/app/application.rb", "base/app/**/*.rb", "base/templates/*.rb"].to_a
+  s.files       = FileList["lib/*.rb", "base/Rakefile", "base/app/application.rb", "base/app/**/*.rb", "base/resources/*", "base/templates/*.rb"].to_a
   s.homepage    = 'http://www.dynamics.io/'
 end

@@ -3,3 +3,8 @@
 
 .DS_Store
 
+#
+# RubyMotion
+#
+
+*.gem
