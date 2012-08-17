@@ -53,7 +53,7 @@ module Dynamics
     end    
         
     def nextScreen
-      self.navigationController.pushViewController(@next_controller, animated: true)      
+      navigationController.pushViewController(@next_controller, animated: true)      
     end
   end
   
