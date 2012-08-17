@@ -9,13 +9,14 @@ module Dynamics
     def application(application, didFinishLaunchingWithOptions:launchOptions)
       @window =  HomeView.alloc.initWithFrame(UIScreen.mainScreen.bounds)  
       @window.makeKeyAndVisible   
-      if @layout == 'Navigation'
+      case @layout
+      when 'Navigation'
         # @@Navigation@@
         # @@End@@       
-      elsif @layout == 'Tab Bar'           
+      when 'Tab Bar'           
         # @@Tab Bar@@
         # @@End@@     
-      elsif @layout == 'Tab Nav'           
+      when 'Tab Nav'           
         # @@Tab Nav@@
         # @@End@@                    
       else     
@@ -27,11 +28,31 @@ module Dynamics
   
   class Controller < UIViewController   
     attr_accessor :next_controller, :next_view
-    
-    def name
-      self.class.name.underscore.split('_')[0].capitalize 
-    end
        
+    def initWithNibName(name, bundle: bundle)
+        super
+        
+        @@index = 0
+        @name = self.class.name.underscore.split('_')[0].capitalize 
+        case App.delegate.layout
+        when 'Navigation'
+          if @name == 'Home'
+            self.navigationItem.title = App.name   
+          end   
+        when 'Tab Bar'   
+          self.tabBarItem = UITabBarItem.alloc.initWithTitle(@name, image: UIImage.imageNamed(@name.downcase + '.png'), tag: @@index)                                               
+        when 'Tab Nav'      
+          if @name == 'Home'
+            self.navigationItem.title = App.name         
+          else
+            self.navigationItem.title = @name                 
+          end                                            
+          self.tabBarItem = UITabBarItem.alloc.initWithTitle(@name, image: UIImage.imageNamed(@name.downcase + '.png'), tag: @@index)                  
+        end        
+        @@index += 1
+        self
+    end       
+    
   private
           
     def loadView
@@ -45,7 +66,7 @@ module Dynamics
     def viewDidLoad
       super
                
-      if name == 'Home'
+      if @name == 'Home'
         self.view.backgroundColor = UIColor.whiteColor                             
       else
         self.view.backgroundColor = UIColor.grayColor             
