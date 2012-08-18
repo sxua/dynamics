@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name        = 'dynamics'
   s.version     = '0.1.3'
   s.executables = 'dynamics'
-  s.date        = '2012-08-20'
+  s.date        = '2012-08-19'
   s.summary     = "A framework for RubyMotion."
   s.description = "A framework for developing RubyMotion applications quickly."
   s.authors     = ["Ng Say Joe"]

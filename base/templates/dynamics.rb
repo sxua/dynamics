@@ -27,7 +27,7 @@ module Dynamics
   end
   
   class Controller < UIViewController   
-    attr_accessor :next_controller, :next_view
+    attr_accessor :name, :next_controller, :next_view
        
     def initWithNibName(name, bundle: bundle)
         super
@@ -66,7 +66,15 @@ module Dynamics
     def viewDidLoad
       super
                
-      if @name == 'Home'
+      case App.delegate.layout
+      when 'Navigation'
+        if !next_controller.nil?
+          navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle(next_controller.name, style: UIBarButtonItemStyleBordered, target: self, action: 'nextScreen')          
+        end
+      end
+                  
+      case @name
+      when 'Home'                                      
         self.view.backgroundColor = UIColor.whiteColor                             
       else
         self.view.backgroundColor = UIColor.grayColor             

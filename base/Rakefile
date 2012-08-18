@@ -10,7 +10,7 @@ require 'dynamics'
 Motion::Project::App.setup do |app|
   app.name = ''  
   app.delegate_class = ''  
-  app.icons = %w{icon.png}
+  app.icons = %w{icon@57.png icon@74.png icon@114.png icon@144.png}
     
   Dynamics::setup_framework(app, File.dirname(__FILE__))
 end

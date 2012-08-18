@@ -72,10 +72,22 @@ module Dynamics
       
       # Resources
 
-      f = File.new(File.join(resources_dir, 'icon.png'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'resources', 'icon.png'))) 
+      f = File.new(File.join(resources_dir, 'icon-57.png'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'resources', 'icon@57.png'))) 
       f.close      
       
+      f = File.new(File.join(resources_dir, 'icon-74.png'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'resources', 'icon@74.png'))) 
+      f.close
+         
+      f = File.new(File.join(resources_dir, 'icon-114.png'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'resources', 'icon@114.png'))) 
+      f.close
+             
+      f = File.new(File.join(resources_dir, 'icon-144.png'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'resources', 'icon@144.png'))) 
+      f.close
+                      
       f = File.new(File.join(resources_dir, 'home.png'), 'w+')   
       f.write(render_code(File.join(base_dir, 'resources', 'home.png'))) 
       f.close
@@ -138,20 +150,14 @@ private
     code = "# @@Navigation@@\n"
     code += "        home_controller = HomeController.alloc.initWithNibName(nil, bundle: nil)\n"  
     controllers = find_controllers(path)    
-    if controllers.size > 0    
-      code += "        home_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers.first[:name]}', style: UIBarButtonItemStyleBordered, target:home_controller, action:'nextScreen')\n"          
-    end
     i = 1
     prev_controller = 'home_controller'
     for controller in controllers         
       code += "        sub#{i}_controller = #{controller[:name]}Controller.alloc.initWithNibName(nil, bundle: nil)\n"     
       code += "        sub#{i}_controller.next_view = #{controller[:name]}View.alloc.initWithFrame(UIScreen.mainScreen.bounds)\n"                        
       code += "        #{prev_controller}.next_controller = sub#{i}_controller\n"        
-      if controller != controllers.last
-        code += "        sub#{i}_controller.navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle('#{controllers[i][:name]}', style: UIBarButtonItemStyleBordered, target:sub#{i}_controller, action:'nextScreen')\n"              
-        prev_controller = "sub#{i}_controller"     
-        i += 1        
-      end
+      prev_controller = "sub#{i}_controller"     
+      i += 1        
     end
     code += "        @window.rootViewController = UINavigationController.alloc.initWithRootViewController(home_controller)\n"       
     code += "        # @@End@@" 
