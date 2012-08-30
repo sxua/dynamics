@@ -38,7 +38,8 @@ module Dynamics
         super
         
         @@index = 0
-        @name = self.class.name.underscore.split('_')[0].capitalize 
+        sub_names = self.class.name.underscore.split('_')
+        @name = sub_names[0, sub_names.size - 1].collect {|x| x.capitalize }.join 
         case App.delegate.layout
         when 'Navigation'
           if @name == 'Home'

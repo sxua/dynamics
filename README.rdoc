@@ -5,7 +5,6 @@ A framework for developing RubyMotion applications quickly.
 == Prerequisites
 
 1. RubyMotion
-1. Formotion
 2. BubbleWrap
 
 == Getting Started
