@@ -53,6 +53,15 @@ module Dynamics
       f.write(render_code(File.join(base_dir, 'app', 'controllers', 'sub2_controller.rb'))) 
       f.close
 
+      # Forms
+
+      views_dir = File.join(app_dir, 'forms')  
+      Dir.mkdir(forms_dir)
+
+      f = File.new(File.join(forms_dir, 'login_form.rb'), 'w+')   
+      f.write(render_code(File.join(base_dir, 'app', 'forms', 'login_form.rb'))) 
+      f.close
+      
       # Views
 
       views_dir = File.join(app_dir, 'views')  

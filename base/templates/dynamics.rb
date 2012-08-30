@@ -2,8 +2,13 @@
 module Dynamics
     
   class Application
-    attr_accessor :layout
+    attr_accessor :layout, :login, :window
   
+    def initialize
+      self.layout = ''
+      self.login = false
+    end
+    
   private
         
     def application(application, didFinishLaunchingWithOptions:launchOptions)
@@ -63,6 +68,10 @@ module Dynamics
       end
     end
     
+    def nextScreen
+      navigationController.pushViewController(@next_controller, animated: true)      
+    end
+        
     def viewDidLoad
       super
                
@@ -75,15 +84,20 @@ module Dynamics
                   
       case @name
       when 'Home'                                      
-        self.view.backgroundColor = UIColor.whiteColor                             
+        self.view.backgroundColor = UIColor.whiteColor     
+        
+        if App.delegate.login
+          login_controller = LoginForm.alloc.initWithNibName(nil, bundle: nil)
+          App.delegate.window.addSubview login_controller.view
+          view.removeFromSuperview     
+        end                           
       else
         self.view.backgroundColor = UIColor.grayColor             
       end       
     end    
-        
-    def nextScreen
-      navigationController.pushViewController(@next_controller, animated: true)      
-    end
+  end
+  
+  class Form < UIViewController
   end
   
   class View < UIView
