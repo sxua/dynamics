@@ -13,12 +13,14 @@ module Dynamics
       build_dir = File.join(name, 'build')      
       resources_dir = File.join(name, 'resources')     
       lib_dir = File.join(name, 'lib')   
-
+      dynamics_dir = File.join(lib_dir, 'dynamics') 
+      
       Dir.mkdir(app_dir) 
       Dir.mkdir(build_dir)       
       Dir.mkdir(resources_dir)      
       Dir.mkdir(lib_dir)    
-
+      Dir.mkdir(dynamics_dir)  
+      
       base_dir = File.join(path, '..', 'base')
 
       f = File.new(File.join(name, 'Rakefile'), 'w+')   
@@ -112,25 +114,31 @@ module Dynamics
   end
     
   def self.setup_framework(app, path)
-    lib_dir = File.join(path, 'lib')    
+    lib_dir = File.join(path, 'lib', 'dynamics')    
     templates_dir = File.join(Gem.bin_path('dynamics', 'dynamics').gsub(File.join('bin', 'dynamics'), ''), 'base', 'templates')
    
-    template_code = lib_code = render_code(File.join(templates_dir, 'dynamics.rb'))
-    template_code.scan(/# @@.+?@@.+?# @@End@@/m) do |block|
-      block.scan(/^# @@.+?@@/) do |placeholder|
-        layout = placeholder.gsub('# @@', '').gsub('@', '')
-        case layout
-           when 'Navigation' then lib_code = lib_code.gsub(block, navigation_code(path))
-           when 'Tab Bar' then lib_code = lib_code.gsub(block, tab_bar_code(path))        
-           when 'Tab Nav' then lib_code = lib_code.gsub(block, tab_nav_code(path))                       
-        end      
+    Dir.foreach(templates_dir) do |template|
+      if template.include?('.rb')
+        lib_code = render_code(File.join(templates_dir, template))
+        if template == 'application.rb'
+          template_code = lib_code
+          template_code.scan(/# @@.+?@@.+?# @@End@@/m) do |block|
+            block.scan(/^# @@.+?@@/) do |placeholder|
+              layout = placeholder.gsub('# @@', '').gsub('@', '')
+              case layout
+                 when 'Navigation' then lib_code = lib_code.gsub(block, navigation_code(path))
+                 when 'Tab Bar' then lib_code = lib_code.gsub(block, tab_bar_code(path))        
+                 when 'Tab Nav' then lib_code = lib_code.gsub(block, tab_nav_code(path))                       
+              end      
+            end
+          end
+        end
+        f = File.open(File.join(lib_dir, template), 'w+')   
+        f.write(lib_code) 
+        f.close
+        app.files.unshift(File.join(lib_dir, template))
       end
     end
-    f = File.open(File.join(lib_dir, 'dynamics.rb'), 'w+')   
-    f.write(lib_code) 
-    f.close
-  
-    app.files.unshift(File.join(lib_dir, 'dynamics.rb')) 
   end
   
 private
