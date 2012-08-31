@@ -88,7 +88,7 @@ module Dynamics
         self.view.backgroundColor = UIColor.whiteColor     
         
         if App.delegate.login
-          login_controller = LoginForm.alloc.initWithNibName(nil, bundle: nil)
+          login_controller = LoginForm.alloc.init
           App.delegate.window.addSubview login_controller.view
           view.removeFromSuperview     
         end                           
