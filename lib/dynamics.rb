@@ -42,74 +42,54 @@ module Dynamics
 
       controllers_dir = File.join(app_dir, 'controllers')    
       Dir.mkdir(controllers_dir)    
-
-      f = File.new(File.join(controllers_dir, 'home_controller.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'app', 'controllers', 'home_controller.rb'))) 
-      f.close    
-
-      f = File.new(File.join(controllers_dir, 'sub1_controller.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'app', 'controllers', 'sub1_controller.rb'))) 
-      f.close
-
-      f = File.new(File.join(controllers_dir, 'sub2_controller.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'app', 'controllers', 'sub2_controller.rb'))) 
-      f.close
+      
+      base_controllers_dir = File.join(base_dir, 'app', 'controllers')      
+      Dir.foreach(base_controllers_dir) do |controller|
+        if controller.include?('.rb')
+          f = File.new(File.join(controllers_dir, controller), 'w+')   
+          f.write(render_code(File.join(base_controllers_dir, controller))) 
+          f.close          
+        end
+      end
 
       # Forms
 
       forms_dir = File.join(app_dir, 'forms')  
       Dir.mkdir(forms_dir)
-
-      f = File.new(File.join(forms_dir, 'login_form.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'app', 'forms', 'login_form.rb'))) 
-      f.close
+      
+      base_forms_dir = File.join(base_dir, 'app', 'forms')
+      Dir.foreach(base_forms_dir) do |form|
+        if form.include?('.rb')
+          f = File.new(File.join(forms_dir, form), 'w+')   
+          f.write(render_code(File.join(base_forms_dir, form))) 
+          f.close          
+        end
+      end
       
       # Views
 
       views_dir = File.join(app_dir, 'views')  
       Dir.mkdir(views_dir)
-
-      f = File.new(File.join(views_dir, 'home_view.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'app', 'views', 'home_view.rb'))) 
-      f.close
-
-      f = File.new(File.join(views_dir, 'sub1_view.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'app', 'views', 'sub1_view.rb'))) 
-      f.close
-
-      f = File.new(File.join(views_dir, 'sub2_view.rb'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'app', 'views', 'sub2_view.rb'))) 
-      f.close
+      
+      base_views_dir = File.join(base_dir, 'app', 'views')
+      Dir.foreach(base_views_dir) do |view|
+        if view.include?('.rb')
+          f = File.new(File.join(forms_dir, view), 'w+')   
+          f.write(render_code(File.join(base_views_dir, view))) 
+          f.close          
+        end
+      end
       
       # Resources
-
-      f = File.new(File.join(resources_dir, 'icon-57.png'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'resources', 'icon@57.png'))) 
-      f.close      
       
-      f = File.new(File.join(resources_dir, 'icon-74.png'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'resources', 'icon@74.png'))) 
-      f.close
-         
-      f = File.new(File.join(resources_dir, 'icon-114.png'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'resources', 'icon@114.png'))) 
-      f.close
-             
-      f = File.new(File.join(resources_dir, 'icon-144.png'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'resources', 'icon@144.png'))) 
-      f.close
-                      
-      f = File.new(File.join(resources_dir, 'home.png'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'resources', 'home.png'))) 
-      f.close
-      
-      f = File.new(File.join(resources_dir, 'sub1.png'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'resources', 'sub1.png'))) 
-      f.close
-      
-      f = File.new(File.join(resources_dir, 'sub2.png'), 'w+')   
-      f.write(render_code(File.join(base_dir, 'resources', 'sub2.png'))) 
-      f.close                  
+      base_resources_dir = File.join(base_dir, 'resources')
+      Dir.foreach(base_resources_dir) do |resource|
+        if resource.include?('.png')
+          f = File.new(File.join(resources_dir, resource), 'w+')   
+          f.write(render_code(File.join(base_resources_dir, resource))) 
+          f.close        
+        end
+      end            
     end
   end
     
