@@ -85,20 +85,143 @@ module Dynamics
                   
       case @name
       when 'Home'                                      
-        self.view.backgroundColor = UIColor.whiteColor     
+        self.view.backgroundColor = UIColor.whiteColor    
         
         if App.delegate.login
           login_controller = LoginForm.alloc.init
           App.delegate.window.addSubview login_controller.view
           view.removeFromSuperview     
-        end                           
+        end                                  
       else
         self.view.backgroundColor = UIColor.grayColor             
-      end       
+      end          
     end    
   end
   
-  class Form < UIViewController
+  class Form < UITableViewController
+    attr_accessor :data_source   
+
+    class DataSource     
+      attr_accessor :controller, :sections, :table     
+
+      def initialize(params = {})
+        self.sections = []
+        self.controller = params[:controller]
+
+        index = 0                  
+        sections = params[:sections] || params["sections"]
+        for section in sections
+          section = create_section(section.merge({index: index}))
+          index += 1
+        end
+
+        self.table = controller.respond_to?(:table_view) ? controller.table_view : controller.tableView
+        self.table.delegate = self
+        self.table.dataSource = self
+        self.table.reloadData      
+      end
+
+      # UITableViewDataSource Methods
+      def numberOfSectionsInTableView(tableView)  
+        sections.count
+      end    
+
+      def tableView(tableView, numberOfRowsInSection: section)  
+        @sections[section].rows.count
+      end
+
+      def tableView(tableView, cellForRowAtIndexPath: indexPath)
+        row = sections[indexPath.section].rows[indexPath.row]
+
+        cell = tableView.dequeueReusableCellWithIdentifier(row.identifier) || begin
+          row.make_cell
+        end
+        cell
+      end
+
+    private
+
+      def create_section(hash = {})
+        section = Section.new(hash)
+        section.form = self
+        self.sections << section
+        section
+      end    
+    end
+
+    class Section 
+      attr_accessor :form, :index, :rows, :title     
+
+      def initialize(params = {})
+        self.rows = [] 
+        self.index = params[:index]      
+        self.title = params[:title]
+
+        index = 0
+        rows = params[:rows] || params["rows"]
+        for row in rows
+          row = create_row(row.merge({index: index}))
+          index += 1
+        end
+      end
+
+    private
+
+      def create_row(hash = {})
+        row = Row.new(hash)
+        row.section = self
+        self.rows << row
+        row
+      end
+    end
+
+    class Row
+      attr_accessor :identifier, :index, :object, :section, :title, :type    
+
+      class StringCell
+        def build_cell(cell)
+          field = UITextField.alloc.initWithFrame(CGRectZero)
+          field.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter
+          field.textAlignment = UITextAlignmentRight
+          cell.addSubview(field)
+          field
+        end      
+      end
+
+      def initialize(params = {})
+        self.index = params[:index]
+        self.title = params[:title]
+        self.type = params[:type]  
+
+        case params[:type]
+        when :string
+          self.object = StringCell.new
+        when :submit
+          self.object = StringCell.new        
+        end    
+      end
+
+      def identifier
+        section.index.to_s + index.to_s
+      end
+
+      def make_cell
+        cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier: identifier)
+
+        cell.accessoryType = UITableViewCellAccessoryNone 
+        cell.editingAccessoryType = UITableViewCellAccessoryNone
+        cell.textLabel.text = title
+
+        edit_field = object.build_cell(cell)
+
+        cell
+      end
+    end
+
+    def init
+      self.initWithStyle(UITableViewStyleGrouped)
+      self
+    end
   end
   
   class View < UIView

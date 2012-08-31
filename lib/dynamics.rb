@@ -55,7 +55,7 @@ module Dynamics
 
       # Forms
 
-      views_dir = File.join(app_dir, 'forms')  
+      forms_dir = File.join(app_dir, 'forms')  
       Dir.mkdir(forms_dir)
 
       f = File.new(File.join(forms_dir, 'login_form.rb'), 'w+')   

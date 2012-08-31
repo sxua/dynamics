@@ -6,7 +6,7 @@ class Application < Dynamics::Application
         
     # self.layout = 'Navigation'
     # self.layout = 'Tab Bar'       
-    # self.layout = 'Tab Nav' 
+    self.layout = 'Tab Nav' 
     
     # self.login = true
   end
