@@ -93,7 +93,7 @@ module Dynamics
     end
   end
     
-  def self.setup_framework(app, path)
+  def self.setup_framework(app, path)    
     offset = app.files.find_index("./app/application.rb")
         
     lib_dir = File.join(path, 'lib', 'dynamics')    
