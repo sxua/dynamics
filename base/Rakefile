@@ -4,7 +4,7 @@ $LOAD_PATH.unshift('/Library/RubyMotion/lib')
 
 require 'motion/project'
 require 'rubygems'
-require 'bubble-wrap/all'
+require 'bubble-wrap/core'
 require 'dynamics'
 
 Motion::Project::App.setup do |app|

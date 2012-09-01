@@ -13,7 +13,7 @@ module Dynamics
       when :string
         self.object = CellString.new
       when :submit
-        self.object = CellString.new        
+        self.object = CellSubmit.new        
       end    
     end
 

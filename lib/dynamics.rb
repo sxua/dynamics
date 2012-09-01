@@ -94,9 +94,10 @@ module Dynamics
   end
     
   def self.setup_framework(app, path)
+    offset = app.files.find_index("./app/application.rb")
+        
     lib_dir = File.join(path, 'lib', 'dynamics')    
-    templates_dir = File.join(Gem.bin_path('dynamics', 'dynamics').gsub(File.join('bin', 'dynamics'), ''), 'base', 'templates')
-   
+    templates_dir = File.join(Gem.bin_path('dynamics', 'dynamics').gsub(File.join('bin', 'dynamics'), ''), 'base', 'templates') 
     Dir.foreach(templates_dir) do |template|
       if template.include?('.rb')
         lib_code = render_code(File.join(templates_dir, template))
@@ -116,7 +117,7 @@ module Dynamics
         f = File.open(File.join(lib_dir, template), 'w+')   
         f.write(lib_code) 
         f.close
-        app.files.unshift(File.join(lib_dir, template))
+        app.files.insert(offset, File.join(lib_dir, template))
       end
     end
   end

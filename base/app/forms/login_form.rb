@@ -25,7 +25,7 @@ class LoginForm < Dynamics::Form
           rows: 
           [
             {
-              title: "Login",
+              title: "Login To #{App.name}",
               type: :submit
             }
           ]
