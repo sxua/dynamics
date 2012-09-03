@@ -9,7 +9,7 @@ module Dynamics
       self.login = false
     end
     
-  private
+  protected
         
     def application(application, didFinishLaunchingWithOptions:launchOptions)
       @window =  HomeView.alloc.initWithFrame(UIScreen.mainScreen.bounds)  

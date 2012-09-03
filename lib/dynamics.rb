@@ -118,6 +118,9 @@ module Dynamics
         f.write(lib_code) 
         f.close
         app.files.insert(offset, File.join(lib_dir, template))
+        if template.include?('cell_')     
+          app.files_dependencies(File.join(lib_dir, template) => File.join(lib_dir, 'cell.rb'))              
+        end   
       end
     end
   end

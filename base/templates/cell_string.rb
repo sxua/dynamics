@@ -1,14 +1,17 @@
 
 module Dynamics
 
-  class CellString
+  class CellString < Cell
     def build_cell(cell)
-      field = UITextField.alloc.initWithFrame(CGRectZero)
-      field.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter
-      field.textAlignment = UITextAlignmentRight
-      cell.addSubview(field)
-      field
-    end      
+      self.control = UITextField.alloc.initWithFrame(CGRectZero)
+      self.control.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter
+      self.control.textAlignment = UITextAlignmentRight
+      cell.addSubview(control)
+    end
+    
+    def on_select(tableViewDelegate)
+      control.becomeFirstResponder
+    end          
   end
   
 end

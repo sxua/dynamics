@@ -29,7 +29,7 @@ module Dynamics
         self
     end       
     
-  private
+  protected
           
     def loadView
       if @next_view.nil?
@@ -38,10 +38,6 @@ module Dynamics
         self.view = @next_view      
       end
     end
-    
-    def nextScreen
-      navigationController.pushViewController(@next_controller, animated: true)      
-    end
         
     def viewDidLoad
       super
@@ -49,7 +45,7 @@ module Dynamics
       case App.delegate.layout
       when 'Navigation'
         if !next_controller.nil?
-          navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle(next_controller.name, style: UIBarButtonItemStyleBordered, target: self, action: 'nextScreen')          
+          navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithTitle(next_controller.name, style: UIBarButtonItemStyleBordered, target: self, action: 'next_screen')          
         end
       end
                   
@@ -68,4 +64,9 @@ module Dynamics
     end    
   end
   
+private
+  
+  def next_screen
+    navigationController.pushViewController(@next_controller, animated: true)      
+  end  
 end

@@ -8,6 +8,9 @@ module Dynamics
       self.initWithStyle(UITableViewStyleGrouped)
       self
     end
+    
+    def on_submit
+    end
   end
 
 end

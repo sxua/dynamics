@@ -20,20 +20,13 @@ module Dynamics
       self.table.dataSource = self
       self.table.reloadData      
     end
-
-    # UITableViewDataSource Methods
+    
+  protected
+  
     def numberOfSectionsInTableView(tableView)  
       sections.count
     end    
 
-    def tableView(tableView, numberOfRowsInSection: section)  
-      @sections[section].rows.count
-    end
-
-    def tableView(tableView, titleForHeaderInSection: section)
-      section = @sections[section].title
-    end
-    
     def tableView(tableView, cellForRowAtIndexPath: indexPath)
       row = sections[indexPath.section].rows[indexPath.row]
 
@@ -41,6 +34,20 @@ module Dynamics
         row.make_cell
       end
       cell
+    end
+    
+    def tableView(tableView, didSelectRowAtIndexPath: indexPath)
+      tableView.deselectRowAtIndexPath(indexPath, animated: true)
+      row = sections[indexPath.section].rows[indexPath.row]
+      row.cell.on_select(self)
+    end
+    
+    def tableView(tableView, numberOfRowsInSection: section)  
+      @sections[section].rows.count
+    end
+
+    def tableView(tableView, titleForHeaderInSection: section)
+      section = @sections[section].title
     end
 
   private

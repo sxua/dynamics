@@ -1,9 +1,7 @@
 
 module Dynamics
   
-  class CellSubmit
-    FIELD_BUFFER = Device.iphone? ? 20 : 64
-          
+  class CellSubmit < Cell          
     def build_cell(cell)
       cell.swizzle(:layoutSubviews) do
         def layoutSubviews
@@ -13,11 +11,10 @@ module Dynamics
           self.detailTextLabel.center = CGPointMake(frame.size.width / 2 - (FIELD_BUFFER / 2), detailTextLabel.center.y)
         end
       end      
-      nil
     end
         
-    def on_select(tableView, tableViewDelegate)
-      tableViewDelegate.submit
-    end 
+    def on_select(tableViewDelegate)
+      tableViewDelegate.controller.on_submit
+    end  
   end      
 end

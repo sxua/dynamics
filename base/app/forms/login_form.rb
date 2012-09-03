@@ -1,5 +1,15 @@
 
 class LoginForm < Dynamics::Form
+    
+  def on_submit
+    super 
+    
+    alert = UIAlertView.new
+    alert.message = "Hello World!"
+    alert.show      
+  end
+      
+protected
   
   def viewDidLoad
     super
