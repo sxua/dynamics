@@ -2,12 +2,12 @@
 module Dynamics
 
   class Section 
-    attr_accessor :form, :index, :rows, :title     
+    attr_accessor :form, :index, :rows, :name     
 
     def initialize(params = {})
       self.rows = [] 
       self.index = params[:index]      
-      self.title = params[:title]
+      self.name = params[:name]
 
       index = 0
       rows = params[:rows] || params["rows"]
@@ -17,6 +17,17 @@ module Dynamics
       end
     end
 
+    def find(name)
+      value = nil
+      for row in rows
+        if row.name == name
+          value = row.value
+          break
+        end
+      end      
+      value
+    end
+    
   private
 
     def create_row(hash = {})

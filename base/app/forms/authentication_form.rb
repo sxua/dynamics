@@ -1,12 +1,11 @@
 
-class LoginForm < Dynamics::Form
+class AuthenticationForm < Dynamics::Form
     
   def on_submit
     super 
     
-    alert = UIAlertView.new
-    alert.message = "Hello World!"
-    alert.show      
+    # email = data_source.find('Email')
+    # password = data_source.find('Password')       
   end
       
 protected
@@ -14,19 +13,19 @@ protected
   def viewDidLoad
     super
     
-    login_dsl = {
+    auth_dsl = {
       controller: self,
       sections: 
       [
         {
           rows: 
           [
-            {
-              title: "Email",
+            {          
+              name: "Email",
               type: :string
             }, 
-            {
-              title: "Password",
+            {         
+              name: "Password",
               type: :string
             }
           ]
@@ -35,14 +34,14 @@ protected
           rows: 
           [
             {
-              title: "Login To #{App.name}",
+              name: "Login To #{App.name}",
               type: :submit
             }
           ]
         }
       ]
     }
-    self.data_source = Dynamics::Form::DataSource.new(login_dsl)
+    self.data_source = Dynamics::DataSource.new(auth_dsl)
   end
     
 end

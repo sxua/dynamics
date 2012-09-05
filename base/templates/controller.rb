@@ -53,9 +53,9 @@ module Dynamics
       when 'Home'                                      
         self.view.backgroundColor = UIColor.whiteColor    
         
-        if App.delegate.login
-          login_controller = LoginForm.alloc.init
-          App.delegate.window.addSubview login_controller.view
+        if App.delegate.authentication
+          auth_controller = AuthenticationForm.alloc.init
+          App.delegate.window.addSubview auth_controller.view
           view.removeFromSuperview     
         end                                  
       else

@@ -8,6 +8,6 @@ class Application < Dynamics::Application
     # self.layout = 'Tab Bar'       
     self.layout = 'Tab Nav' 
     
-    # self.login = true
+    # self.authentication = true
   end
 end

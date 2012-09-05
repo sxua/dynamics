@@ -2,11 +2,11 @@
 module Dynamics
     
   class Application
-    attr_accessor :layout, :login, :window
+    attr_accessor :authentication, :layout, :window
   
     def initialize
       self.layout = ''
-      self.login = false
+      self.authentication = false
     end
     
   protected

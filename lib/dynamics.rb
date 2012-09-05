@@ -74,7 +74,7 @@ module Dynamics
       base_views_dir = File.join(base_dir, 'app', 'views')
       Dir.foreach(base_views_dir) do |view|
         if view.include?('.rb')
-          f = File.new(File.join(forms_dir, view), 'w+')   
+          f = File.new(File.join(views_dir, view), 'w+')   
           f.write(render_code(File.join(base_views_dir, view))) 
           f.close          
         end

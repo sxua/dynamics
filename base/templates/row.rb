@@ -2,11 +2,11 @@
 module Dynamics
     
   class Row
-    attr_accessor :cell, :identifier, :index, :section, :title, :type    
+    attr_accessor :cell, :identifier, :index, :name, :section, :type, :value    
 
     def initialize(params = {})
       self.index = params[:index]
-      self.title = params[:title]
+      self.name = params[:name]
       self.type = params[:type]  
 
       case params[:type]
@@ -23,14 +23,16 @@ module Dynamics
 
     def make_cell
       cell_control = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier: identifier)
-
       cell_control.accessoryType = UITableViewCellAccessoryNone 
       cell_control.editingAccessoryType = UITableViewCellAccessoryNone
-      cell_control.textLabel.text = title
+      cell_control.textLabel.text = name
 
-      edit_field = cell.build_cell(cell_control)
-
+      cell.build_cell(cell_control)
       cell_control
+    end
+    
+    def value
+      cell.control.text
     end
   end
 end

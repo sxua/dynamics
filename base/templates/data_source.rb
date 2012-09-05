@@ -21,6 +21,17 @@ module Dynamics
       self.table.reloadData      
     end
     
+    def find(name)
+      value = nil
+      for section in sections
+        value = section.find(name)
+        if !value.nil?
+          break
+        end
+      end      
+      value
+    end
+    
   protected
   
     def numberOfSectionsInTableView(tableView)  
@@ -29,13 +40,19 @@ module Dynamics
 
     def tableView(tableView, cellForRowAtIndexPath: indexPath)
       row = sections[indexPath.section].rows[indexPath.row]
-
-      cell = tableView.dequeueReusableCellWithIdentifier(row.identifier) || begin
-        row.make_cell
-      end
-      cell
+      tableView.dequeueReusableCellWithIdentifier(row.identifier) || row.make_cell
     end
     
+    def tableView(tableView, commitEditingStyle: editingStyle, forRowAtIndexPath: indexPath)
+      row = row_for_index_path(indexPath)
+      case editingStyle
+      when UITableViewCellEditingStyleInsert
+        row.object.on_insert(tableView, self)
+      when UITableViewCellEditingStyleDelete
+        row.object.on_delete(tableView, self)
+      end
+    end
+        
     def tableView(tableView, didSelectRowAtIndexPath: indexPath)
       tableView.deselectRowAtIndexPath(indexPath, animated: true)
       row = sections[indexPath.section].rows[indexPath.row]
@@ -47,7 +64,7 @@ module Dynamics
     end
 
     def tableView(tableView, titleForHeaderInSection: section)
-      section = @sections[section].title
+      section = @sections[section].name
     end
 
   private
