@@ -21,13 +21,11 @@ for arg in ARGV
      when 1 then command = arg
      when 2 then args = arg
      else command = '-h'
-  end    
+  end
   i += 1
 end
 case command
    when '-h', '--help' then display_usage
    when 'create' then Dynamics::create_scaffold(args, File.dirname(__FILE__))
    else  display_usage
-end  
-
-
+end

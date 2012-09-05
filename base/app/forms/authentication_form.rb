@@ -1,37 +1,36 @@
-
 class AuthenticationForm < Dynamics::Form
-    
+
   def on_submit
-    super 
-    
+    super
+
     # email = data_source.find('Email')
-    # password = data_source.find('Password')       
+    # password = data_source.find('Password')
   end
-      
+
 protected
-  
+
   def viewDidLoad
     super
-    
+
     auth_dsl = {
       controller: self,
-      sections: 
+      sections:
       [
         {
-          rows: 
+          rows:
           [
-            {          
+            {
               name: "Email",
               type: :string
-            }, 
-            {         
+            },
+            {
               name: "Password",
               type: :string
             }
           ]
-        }, 
+        },
         {
-          rows: 
+          rows:
           [
             {
               name: "Login To #{App.name}",
@@ -43,5 +42,5 @@ protected
     }
     self.data_source = Dynamics::DataSource.new(auth_dsl)
   end
-    
+
 end

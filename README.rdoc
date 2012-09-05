@@ -25,7 +25,7 @@ A framework for developing RubyMotion applications quickly.
 
 == Contributing
 
-We encourage you to contribute to Dynamics! 
+We encourage you to contribute to Dynamics!
 
 == License
 
